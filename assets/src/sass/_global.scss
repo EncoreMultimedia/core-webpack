@@ -1,0 +1,53 @@
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+h1 {
+  color: blue;
+  font-size: 80px;
+}
+::selection {
+
+  color: $color_white;
+}
+
+button {
+  cursor: pointer;
+}
+
+#content {
+  .wrapper {
+
+    & > *:first-child {
+      margin-top: 0;
+    }
+
+    & > *:last-child {
+      margin-bottom: 0;
+    }
+
+  }
+
+  /* Lists */
+
+  ul, ol {
+
+
+    li {
+
+    }
+  }
+
+  ul li:before {
+
+  }
+
+  ol {
+
+
+    li:before {
+
+    }
+  }
+
+}

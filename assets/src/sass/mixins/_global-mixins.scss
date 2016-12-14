@@ -1,0 +1,167 @@
+// =============================================================================
+// Theme Mixins
+// =============================================================================
+
+@mixin dropshadow($type: modal) {
+  @if ($type == modal) {
+    box-shadow: 0 10px 30px 0 rgba(0, 0, 0, 0.3);
+  } @else if ($type == nav-button) {
+    box-shadow: 0 4px 6px 0 rgba(50, 50, 93, 0.11);
+  } @else if ($type == hero-button) {
+    box-shadow: 0 8px 20px 0 rgba(35, 31, 32, 0.2);
+  }
+}
+
+@function get-radius($size: small) {
+  $radius: 0;
+
+  @if ($size == small) {
+    $radius: em(4, true);
+  }
+
+  @return $radius;
+}
+
+@mixin border-radius($size) {
+  $radius: get-radius($size);
+
+  border-radius: $radius;
+}
+
+@mixin border-top-radius($size) {
+  $radius: get-radius($size);
+
+  border-top-right-radius: $radius;
+  border-top-left-radius: $radius;
+  background-clip: padding-box;
+}
+
+@mixin border-right-radius($size) {
+  $radius: get-radius($size);
+
+  border-bottom-right-radius: $radius;
+  border-top-right-radius: $radius;
+  background-clip: padding-box;
+}
+
+@mixin border-bottom-radius($size) {
+  $radius: get-radius($size);
+
+  border-bottom-right-radius: $radius;
+  border-bottom-left-radius: $radius;
+  background-clip: padding-box;
+}
+
+@mixin border-left-radius($size) {
+  $radius: get-radius($size);
+
+  border-bottom-left-radius: $radius;
+  border-top-left-radius: $radius;
+  background-clip: padding-box;
+}
+
+@mixin old-ie-background {
+  .lt-ie9 & {
+    -ms-behavior: url("/assets/backgroundsize.min.htc");
+  }
+}
+
+// =============================================================================
+// Utility Mixins
+// =============================================================================
+
+// Clearfix
+@mixin clearfix() {
+  &::after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+}
+
+// if $context is true, switch to rem
+@function em($px, $context-or-rem: $base-font-size) {
+  @if ($context-or-rem == true) {
+    @return $px / strip_unit($base-font-size) * 1rem;
+  } @else {
+    @return $px / strip_unit($context-or-rem) * 1em;
+  }
+}
+
+/// Remove the unit of a length
+/// @param {Number} $number - Number to remove unit from
+/// @return {Number} - Unitless number
+@function strip_unit($number) {
+  @if type-of($number) == 'number' and not unitless($number) {
+    @return $number / ($number * 0 + 1);
+  }
+
+  @return $number;
+}
+
+//
+// Vertical Rhythm
+//
+// This is the minimal amount of code needed to create vertical rhythm in our
+// CSS. If you are looking for a robust solution, look at the excellent Typey
+// library. @see https://github.com/jptaranto/typey
+
+@function normalize-rhythm($value, $relative-to: $base-font-size, $unit: $base-unit) {
+  @if unit($value) != px {
+    @error "The normalize vertical-rhythm module only supports px inputs. The typey library is better.";
+  }
+
+  @if $unit == rem {
+    @return ($value / $base-font-size) * 1rem;
+  } @else if $unit == em {
+    @return ($value / $relative-to) * 1em;
+  } @else { // $unit == px
+    @return $value;
+  }
+}
+
+@mixin normalize-font-size($value, $relative-to: $base-font-size) {
+  @if unit($value) != 'px' {
+    @error "normalize-font-size() only supports px inputs. The typey library is better.";
+  }
+
+  font-size: normalize-rhythm($value, $relative-to);
+}
+
+@mixin normalize-rhythm($property, $values, $relative-to: $base-font-size) {
+  $value-list: $values;
+  $sep: space;
+
+  @if type-of($values) == 'list' {
+    $sep: list-separator($values);
+  } @else {
+    $value-list: append((), $values);
+  }
+
+  $normalized-values: ();
+
+  @each $value in $value-list {
+    @if unitless($value) and $value != 0 {
+      $value: $value * normalize-rhythm($base-line-height, $relative-to);
+    }
+
+    $normalized-values: append($normalized-values, $value, $sep);
+  }
+
+  #{$property}: $normalized-values;
+}
+
+@mixin normalize-margin($values, $relative-to: $base-font-size) {
+  @include normalize-rhythm(margin, $values, $relative-to);
+}
+
+@mixin normalize-line-height($font-size, $min-line-padding: 2px) {
+  $lines: ceil($font-size / $base-line-height);
+
+  // If lines are cramped include some extra leading.
+  @if ($lines * $base-line-height - $font-size) < ($min-line-padding * 2) {
+    $lines: $lines + 1;
+  }
+
+  @include normalize-rhythm(line-height, $lines, $font-size);
+}

@@ -1,0 +1,26 @@
+{
+  "extends": "stylelint-config-standard",
+  "ignoreFiles": ["assets/css/**/*.css", "assets/sprites/**/*", "node_modules/**/*"],
+  "rules": {
+    "number-leading-zero": null,
+    "shorthand-property-no-redundant-values": null,
+    "selector-list-comma-newline-after": null,
+    "selector-pseudo-element-colon-notation": "single",
+    "color-hex-length": "long",
+    "block-closing-brace-newline-after": [
+      "always", {
+        "ignoreAtRules": ["if", "else"]
+      }
+    ],
+    "at-rule-empty-line-before":[
+      "always", {
+        "except": [
+          "blockless-after-same-name-blockless",
+          "first-nested"
+        ],
+        "ignore": ["after-comment"],
+        "ignoreAtRules": ["else"]
+      }
+    ]
+  }
+}

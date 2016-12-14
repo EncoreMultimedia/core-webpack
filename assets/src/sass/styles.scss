@@ -1,0 +1,10 @@
+// Mixins
+@import "mixins/global-mixins";
+
+// Init (can use mixins)
+@import "init";
+
+// Setup and global css
+@import "normalize";
+@import "global";
+
