@@ -12,6 +12,11 @@ $ yarn
 $ yarn start
 *Starts the webpack server with the webpack server console window showing status and file sizes*
 ````
+
+`
+$yarn run build
+*Builds your dev files into a production build*
+`
 ## To watch for changes while developing
 *Let webpack handle this for you.. like a magical Unicorn*
 
